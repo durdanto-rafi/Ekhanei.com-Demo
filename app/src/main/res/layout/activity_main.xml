@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="@dimen/twenty"
     tools:context=".MainActivity">
 
@@ -16,13 +17,17 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/zero"
             android:layout_weight="1">
-
-            <SearchView
-                android:id="@+id/searchView"
+            <!--<android.support.v7.widget.SearchView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#fff"
-                android:queryHint="What do you have to cook?"></SearchView>>
+                android:layout_height="match_parent"></android.support.v7.widget.SearchView>-->
+            <com.mancj.materialsearchbar.MaterialSearchBar
+                app:speechMode="false"
+                app:hint="Custom hint"
+
+                app:maxSuggestionsCount="10"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/searchBar" />
         </LinearLayout>
 
         <android.support.v7.widget.RecyclerView

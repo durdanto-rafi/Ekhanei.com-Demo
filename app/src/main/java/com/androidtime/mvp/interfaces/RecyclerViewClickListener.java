@@ -7,5 +7,5 @@ import android.view.View;
  */
 public interface RecyclerViewClickListener {
     //create interface for all recyclerView onClickItemLister
-    public void recyclerViewListClicked(View v, int position);
+    void recyclerViewListClicked(View v, int position);
 }

@@ -1,6 +1,7 @@
 package com.androidtime.mvp.presenter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,7 +9,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.androidtime.mvp.DetailsActivity;
 import com.androidtime.mvp.R;
+import com.androidtime.mvp.interfaces.RecyclerViewClickListener;
 import com.androidtime.mvp.model.RecipeDetail;
 import com.squareup.picasso.Picasso;
 
@@ -26,6 +29,7 @@ public class Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     List<RecipeDetail> recipeDetails;
     OnLoadMoreListener loadMoreListener;
     boolean isLoading = false, isMoreDataAvailable = true;
+    private static RecyclerViewClickListener itemListener;
 
     /*
     * isLoading - to set the remote loading and complete status to fix back to back load more call
@@ -34,9 +38,10 @@ public class Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     * */
 
 
-    public Adapter(Context context, List<RecipeDetail> recipeDetails) {
+    public Adapter(Context context, List<RecipeDetail> recipeDetails,RecyclerViewClickListener itemListener) {
         this.context = context;
         this.recipeDetails = recipeDetails;
+        this.itemListener = itemListener;
     }
 
     @Override
@@ -78,7 +83,7 @@ public class Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     /* VIEW HOLDERS */
 
-    static class MovieHolder extends RecyclerView.ViewHolder {
+    static class MovieHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView tvTitle;
         //TextView tvRating;
         ImageView ivThumbnail;
@@ -88,6 +93,7 @@ public class Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             tvTitle = (TextView) itemView.findViewById(R.id.tvTitle);
             //tvRating=(TextView)itemView.findViewById(R.id.rating);
             ivThumbnail = (ImageView) itemView.findViewById(R.id.ivThumbnail);
+
         }
 
         void bindData(RecipeDetail recipeDetail) {
@@ -97,7 +103,19 @@ public class Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 Picasso.with(context).load(recipeDetail.getThumbnail()).resize(80, 80).into(ivThumbnail);
             else
                 Picasso.with(context).load("https://media.licdn.com/mpr/mpr/shrinknp_100_100/AAEAAQAAAAAAAAk7AAAAJDVkYTRmMWJjLWExMDYtNDg0OC1hNDE2LTI0NzE4Mzk0ZTgwYw.png").resize(80, 80).into(ivThumbnail);
+
+            ivThumbnail.setOnClickListener(this);
         }
+
+        @Override
+        public void onClick(View v) {
+            if (itemListener != null) {
+                itemListener.recyclerViewListClicked(v, this.getAdapterPosition());
+            }
+        }
+
+
+
     }
 
     static class LoadHolder extends RecyclerView.ViewHolder {

@@ -1,6 +1,7 @@
 package com.androidtime.mvp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -8,7 +9,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,18 +19,20 @@ import java.util.List;
 
 import com.androidtime.mvp.interfaces.ApiInterface;
 import com.androidtime.mvp.interfaces.MainActivityView;
+import com.androidtime.mvp.interfaces.RecyclerViewClickListener;
 import com.androidtime.mvp.model.Recipe;
 import com.androidtime.mvp.model.RecipeDetail;
 import com.androidtime.mvp.presenter.Adapter;
 import com.androidtime.mvp.presenter.ListAdapter;
 import com.androidtime.mvp.presenter.MainActivityPresenter;
 import com.androidtime.mvp.utilities.ApiClient;
+import com.mancj.materialsearchbar.MaterialSearchBar;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity implements MainActivityView {
+public class MainActivity extends AppCompatActivity implements MainActivityView, MaterialSearchBar.OnSearchActionListener {
 
     TextView textViewIp;
     TextView textViewCountry;
@@ -44,25 +46,35 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
     Adapter adapter;
     MainActivity mainActivity;
     int pageIndex = 1;
+    MaterialSearchBar searchBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         presenter = new MainActivityPresenter(this);
+        mainActivity = this;
         rvList = (RecyclerView) findViewById(R.id.rvList);
 
 
         recipeDetails = new ArrayList<>();
 
-        adapter = new Adapter(this, recipeDetails);
+        adapter = new Adapter(this, recipeDetails, new RecyclerViewClickListener() {
+            @Override
+            public void recyclerViewListClicked(View v, int position) {
+                Intent intent = new Intent(mainActivity, DetailsActivity.class);
+                intent.putExtra("TITLE", recipeDetails.get(position).getTitle());
+                intent.putExtra("HREF", recipeDetails.get(position).getHref());
+                startActivity(intent);
+                finish();
+            }
+        });
         adapter.setLoadMoreListener(new Adapter.OnLoadMoreListener() {
             @Override
             public void onLoadMore() {
                 rvList.post(new Runnable() {
                     @Override
                     public void run() {
-                        // int index = recipeDetails.size() - 1;
                         pageIndex++;
                         loadMore(pageIndex);
                     }
@@ -87,6 +99,13 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
             }
         });*/
         load(pageIndex);
+
+        searchBar = (MaterialSearchBar) findViewById(R.id.searchBar);
+        searchBar.setHint("Custom hint");
+        //enable searchbar callbacks
+        searchBar.setOnSearchActionListener(mainActivity);
+        //restore last queries from disk
+        //lastSearches = loadSearchSuggestionFromDisk();
 
     }
 
@@ -173,5 +192,21 @@ public class MainActivity extends AppCompatActivity implements MainActivityView 
                 //Log.e(TAG, t.toString());
             }
         });
+    }
+
+    @Override
+    public void onSearchStateChanged(boolean b) {
+        String s = b ? "enabled" : "disabled";
+        Toast.makeText(MainActivity.this, "Search " + s, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onSearchConfirmed(CharSequence charSequence) {
+        Toast.makeText(mainActivity, "2", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onButtonClicked(int i) {
+
     }
 }
