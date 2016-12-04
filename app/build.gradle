@@ -37,8 +37,6 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.github.mancj:MaterialSearchBar:0.3.1'
 
-    compile 'br.com.mauker.materialsearchview:materialsearchview:1.2.0'
-
     compile 'com.jakewharton:butterknife:8.4.0'
 
 }

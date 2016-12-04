@@ -97,7 +97,7 @@ public class Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         void bindData(RecipeDetail recipeDetail) {
             tvTitle.setText(recipeDetail.getTitle());
             if (recipeDetail.getThumbnail().length() > 0)
-                Picasso.with(context).load(recipeDetail.getThumbnail()).resize(80, 80).into(ivThumbnail);
+                Picasso.with(context).load(recipeDetail.getThumbnail()).resize(100, 100).into(ivThumbnail);
             else
                 Picasso.with(context).load("https://media.licdn.com/mpr/mpr/shrinknp_100_100/AAEAAQAAAAAAAAk7AAAAJDVkYTRmMWJjLWExMDYtNDg0OC1hNDE2LTI0NzE4Mzk0ZTgwYw.png").resize(80, 80).into(ivThumbnail);
 

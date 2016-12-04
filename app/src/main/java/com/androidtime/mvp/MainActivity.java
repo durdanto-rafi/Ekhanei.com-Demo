@@ -108,11 +108,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
         load(pageIndex, "");
 
         searchBar = (MaterialSearchBar) findViewById(R.id.searchBar);
-        searchBar.setHint("Custom hint");
-        //enable searchbar callbacks
         searchBar.setOnSearchActionListener(mainActivity);
-        //restore last queries from disk
-        //lastSearches = loadSearchSuggestionFromDisk();
+        searchBar.enableSearch();
 
     }
 
@@ -174,14 +171,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
             public void onResponse(Call<Recipe> call, Response<Recipe> response) {
                 if (response.isSuccessful()) {
                     recipeDetails.remove(recipeDetails.size() - 1);
-
                     List<RecipeDetail> recipeDetailsList = response.body().getRecipeDetailsList();
                     if (recipeDetailsList.size() > 0) {
-                        //add loaded data
                         recipeDetails.addAll(recipeDetailsList);
-                    } else {//result size 0 means there is no more data available at server
                         adapter.setMoreDataAvailable(false);
-                        //telling adapter to stop calling load more as no more server data available
                         Toast.makeText(mainActivity, "No More Data Available", Toast.LENGTH_LONG).show();
                     }
                     adapter.notifyDataChanged();
@@ -200,15 +193,14 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
 
     @Override
     public void onSearchStateChanged(boolean b) {
-        String s = b ? "enabled" : "disabled";
-        Toast.makeText(MainActivity.this, "Search " + s, Toast.LENGTH_SHORT).show();
+        if (!b)
+            searchBar.enableSearch();
     }
 
     @Override
     public void onSearchConfirmed(CharSequence charSequence) {
         k++;
         if (k % 2 != 0) {
-            Toast.makeText(mainActivity, charSequence, Toast.LENGTH_SHORT).show();
             query = true;
             pageIndex = 1;
             recipeDetails.clear();
