@@ -16,9 +16,13 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/zero"
             android:layout_weight="1">
-            <android.support.v7.widget.SearchView
+
+            <SearchView
+                android:id="@+id/searchView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"></android.support.v7.widget.SearchView>
+                android:layout_height="wrap_content"
+                android:background="#fff"
+                android:queryHint="What do you have to cook?"></SearchView>>
         </LinearLayout>
 
         <android.support.v7.widget.RecyclerView
