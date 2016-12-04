@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,6 +48,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
     MainActivity mainActivity;
     int pageIndex = 1;
     MaterialSearchBar searchBar;
+    Boolean query = false;
+    int k = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,10 +58,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
         presenter = new MainActivityPresenter(this);
         mainActivity = this;
         rvList = (RecyclerView) findViewById(R.id.rvList);
-
+        //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
         recipeDetails = new ArrayList<>();
-
         adapter = new Adapter(this, recipeDetails, new RecyclerViewClickListener() {
             @Override
             public void recyclerViewListClicked(View v, int position) {
@@ -76,7 +78,12 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
                     @Override
                     public void run() {
                         pageIndex++;
-                        loadMore(pageIndex);
+                        if (query)
+                            loadMore(pageIndex, searchBar.getText());
+                        else {
+                            loadMore(pageIndex, "");
+                        }
+
                     }
                 });
                 //Calling loadMore function in Runnable to fix the
@@ -98,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
                 presenter.getIpInformation();
             }
         });*/
-        load(pageIndex);
+        load(pageIndex, "");
 
         searchBar = (MaterialSearchBar) findViewById(R.id.searchBar);
         searchBar.setHint("Custom hint");
@@ -131,18 +138,15 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
         return getApplicationContext();
     }
 
-    private void load(int index) {
+    private void load(int index, String query) {
         ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
-        Call<Recipe> call = apiService.getRecipe(index, "Omelet");
+        Call<Recipe> call = apiService.getRecipe(index, query);
         call.enqueue(new Callback<Recipe>() {
             @Override
             public void onResponse(Call<Recipe> call, Response<Recipe> response) {
                 if (response.isSuccessful()) {
-                    int statusCode = response.code();
-                    //List<RecipeDetail> recipeDetails = response.body().getRecipeDetailsList();
                     recipeDetails.addAll(response.body().getRecipeDetailsList());
                     adapter.notifyDataChanged();
-                    //recyclerView.setAdapter(new MoviesAdapter(movies, R.layout.list_item_movie, getApplicationContext()));
                 } else {
                     Toast.makeText(mainActivity, "Error", Toast.LENGTH_LONG).show();
                 }
@@ -156,7 +160,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
         });
     }
 
-    private void loadMore(int index) {
+    private void loadMore(int index, String query) {
 
         //add loading progress view
         recipeDetails.add(new RecipeDetail(""));
@@ -164,7 +168,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
 
 
         ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
-        Call<Recipe> call = apiService.getRecipe(index, "Omelet");
+        Call<Recipe> call = apiService.getRecipe(index, query);
         call.enqueue(new Callback<Recipe>() {
             @Override
             public void onResponse(Call<Recipe> call, Response<Recipe> response) {
@@ -202,7 +206,16 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
 
     @Override
     public void onSearchConfirmed(CharSequence charSequence) {
-        Toast.makeText(mainActivity, "2", Toast.LENGTH_LONG).show();
+        k++;
+        if (k % 2 != 0) {
+            Toast.makeText(mainActivity, charSequence, Toast.LENGTH_SHORT).show();
+            query = true;
+            pageIndex = 1;
+            recipeDetails.clear();
+            adapter.notifyDataChanged();
+            rvList.swapAdapter(adapter, false);
+            load(pageIndex, searchBar.getText());
+        }
     }
 
     @Override

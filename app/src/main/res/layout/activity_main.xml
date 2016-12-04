@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="@dimen/twenty"
     tools:context=".MainActivity">
 
@@ -17,17 +17,13 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/zero"
             android:layout_weight="1">
-            <!--<android.support.v7.widget.SearchView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"></android.support.v7.widget.SearchView>-->
             <com.mancj.materialsearchbar.MaterialSearchBar
-                app:speechMode="false"
-                app:hint="Custom hint"
-
-                app:maxSuggestionsCount="10"
+                android:id="@+id/searchBar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/searchBar" />
+                app:hint="@string/search_hint"
+                app:maxSuggestionsCount="10"
+                app:speechMode="false" />
         </LinearLayout>
 
         <android.support.v7.widget.RecyclerView

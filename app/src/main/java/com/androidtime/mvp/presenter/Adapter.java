@@ -85,20 +85,17 @@ public class Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     static class MovieHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView tvTitle;
-        //TextView tvRating;
         ImageView ivThumbnail;
 
         public MovieHolder(View itemView) {
             super(itemView);
             tvTitle = (TextView) itemView.findViewById(R.id.tvTitle);
-            //tvRating=(TextView)itemView.findViewById(R.id.rating);
             ivThumbnail = (ImageView) itemView.findViewById(R.id.ivThumbnail);
 
         }
 
         void bindData(RecipeDetail recipeDetail) {
             tvTitle.setText(recipeDetail.getTitle());
-            //tvRating.setText("Rating "+movieModel.rating);
             if (recipeDetail.getThumbnail().length() > 0)
                 Picasso.with(context).load(recipeDetail.getThumbnail()).resize(80, 80).into(ivThumbnail);
             else

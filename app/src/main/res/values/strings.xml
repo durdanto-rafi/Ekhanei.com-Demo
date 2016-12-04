@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">MVPTutorial</string>
+    <string name="app_name">Ekhanei.com Demo</string>
+    <string name="search_hint">What do you have to cook?</string>
 </resources>
