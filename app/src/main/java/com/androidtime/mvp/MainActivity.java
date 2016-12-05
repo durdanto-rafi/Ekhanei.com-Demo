@@ -29,25 +29,23 @@ import com.androidtime.mvp.presenter.MainActivityPresenter;
 import com.androidtime.mvp.utilities.ApiClient;
 import com.mancj.materialsearchbar.MaterialSearchBar;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity implements MainActivityView, MaterialSearchBar.OnSearchActionListener {
-
-    TextView textViewIp;
-    TextView textViewCountry;
-    TextView textViewLocation;
-    ProgressBar progressBar;
     MainActivityPresenter presenter;
+    @BindView(R.id.rvList)
     RecyclerView rvList;
+    @BindView(R.id.searchBar)
+    MaterialSearchBar searchBar;
 
     List<RecipeDetail> recipeDetails;
-    ListAdapter listAdapter;
     Adapter adapter;
     MainActivity mainActivity;
     int pageIndex = 1;
-    MaterialSearchBar searchBar;
     Boolean query = false;
     int k = 0;
 
@@ -55,10 +53,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
         presenter = new MainActivityPresenter(this);
         mainActivity = this;
-        rvList = (RecyclerView) findViewById(R.id.rvList);
-        //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
         recipeDetails = new ArrayList<>();
         adapter = new Adapter(this, recipeDetails, new RecyclerViewClickListener() {
@@ -77,17 +74,16 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
                 rvList.post(new Runnable() {
                     @Override
                     public void run() {
+                        recipeDetails.add(new RecipeDetail(""));
+                        adapter.notifyItemInserted(recipeDetails.size() - 1);
                         pageIndex++;
-                        if (query)
-                            loadMore(pageIndex, searchBar.getText());
-                        else {
-                            loadMore(pageIndex, "");
+                        if (query) {
+                            presenter.getRecipeData(pageIndex, searchBar.getText());
+                        } else {
+                            presenter.getRecipeData(pageIndex, "");
                         }
-
                     }
                 });
-                //Calling loadMore function in Runnable to fix the
-                // java.lang.IllegalStateException: Cannot call this method while RecyclerView is computing a layout or scrolling error
             }
         });
 
@@ -99,35 +95,21 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
         rvList.setLayoutManager(gridLayoutManager);
         rvList.setAdapter(adapter);
 
-        /*button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                presenter.getIpInformation();
-            }
-        });*/
-        load(pageIndex, "");
+        presenter.getRecipeData(pageIndex, "");
 
-        searchBar = (MaterialSearchBar) findViewById(R.id.searchBar);
         searchBar.setOnSearchActionListener(mainActivity);
         searchBar.enableSearch();
 
     }
 
     @Override
-    public void showIpInfo(HashMap infoData) {
-        textViewIp.setText("IP " + infoData.get("ip").toString());
-        textViewCountry.setText("Country " + infoData.get("country").toString());
-        textViewLocation.setText("Location " + infoData.get("location").toString());
-    }
-
-    @Override
     public void startLoading() {
-        progressBar.setVisibility(View.VISIBLE);
+
     }
 
     @Override
     public void stopLoading() {
-        progressBar.setVisibility(View.GONE);
+
     }
 
     @Override
@@ -135,30 +117,22 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
         return getApplicationContext();
     }
 
-    private void load(int index, String query) {
-        ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
-        Call<Recipe> call = apiService.getRecipe(index, query);
-        call.enqueue(new Callback<Recipe>() {
-            @Override
-            public void onResponse(Call<Recipe> call, Response<Recipe> response) {
-                if (response.isSuccessful()) {
-                    recipeDetails.addAll(response.body().getRecipeDetailsList());
-                    adapter.notifyDataChanged();
-                } else {
-                    Toast.makeText(mainActivity, "Error", Toast.LENGTH_LONG).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Recipe> call, Throwable t) {
-                // Log error here since request failed
-                //Log.e(TAG, t.toString());
-            }
-        });
+    @Override
+    public void load(List<RecipeDetail> recipeDetails) {
+        if (pageIndex > 1) {
+            this.recipeDetails.remove(this.recipeDetails.size() - 1);
+        }
+        if (recipeDetails.size() > 0) {
+            this.recipeDetails.addAll(recipeDetails);
+            adapter.notifyDataChanged();
+        } else {
+            adapter.setMoreDataAvailable(false);
+            Toast.makeText(mainActivity, "No More Data Available", Toast.LENGTH_LONG).show();
+        }
     }
 
-    private void loadMore(int index, String query) {
 
+    private void loadMore(int index, String query) {
         //add loading progress view
         recipeDetails.add(new RecipeDetail(""));
         adapter.notifyItemInserted(recipeDetails.size() - 1);
@@ -199,15 +173,12 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
 
     @Override
     public void onSearchConfirmed(CharSequence charSequence) {
-        k++;
-        if (k % 2 != 0) {
-            query = true;
-            pageIndex = 1;
-            recipeDetails.clear();
-            adapter.notifyDataChanged();
-            rvList.swapAdapter(adapter, false);
-            load(pageIndex, searchBar.getText());
-        }
+        query = true;
+        pageIndex = 1;
+        recipeDetails.clear();
+        adapter.notifyDataChanged();
+        rvList.swapAdapter(adapter, false);
+        presenter.getRecipeData(pageIndex, searchBar.getText());
     }
 
     @Override
