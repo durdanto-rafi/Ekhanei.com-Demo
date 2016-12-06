@@ -1,6 +1,6 @@
-package com.androidtime.mvp.interfaces;
+package com.ekhanei.mvp.interfaces;
 
-import com.androidtime.mvp.model.RecipeDetail;
+import com.ekhanei.mvp.model.RecipeDetail;
 
 import java.util.List;
 

@@ -1,10 +1,10 @@
-package com.androidtime.mvp.model;
+package com.ekhanei.mvp.model;
 
 import android.content.Context;
 
-import com.androidtime.mvp.rest.ApiInterface;
-import com.androidtime.mvp.interfaces.OnDataProcess;
-import com.androidtime.mvp.rest.ApiClient;
+import com.ekhanei.mvp.rest.ApiInterface;
+import com.ekhanei.mvp.interfaces.OnDataProcess;
+import com.ekhanei.mvp.rest.ApiClient;
 
 import retrofit2.Call;
 import retrofit2.Callback;

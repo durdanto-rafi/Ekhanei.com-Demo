@@ -1,4 +1,4 @@
-package com.androidtime.mvp.presenter;
+package com.ekhanei.mvp.presenter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -8,9 +8,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.androidtime.mvp.R;
-import com.androidtime.mvp.interfaces.OnRecyclerViewClickListener;
-import com.androidtime.mvp.model.RecipeDetail;
+import com.ekhanei.mvp.R;
+import com.ekhanei.mvp.interfaces.OnRecyclerViewClickListener;
+import com.ekhanei.mvp.model.RecipeDetail;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;

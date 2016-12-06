@@ -1,10 +1,6 @@
-package com.androidtime.mvp.interfaces;
+package com.ekhanei.mvp.interfaces;
 
 import android.content.Context;
-
-import com.androidtime.mvp.model.RecipeDetail;
-
-import java.util.List;
 
 /**
  * Created by RAFI on 05-Dec-16.

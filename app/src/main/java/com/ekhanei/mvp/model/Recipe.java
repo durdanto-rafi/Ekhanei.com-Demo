@@ -1,4 +1,4 @@
-package com.androidtime.mvp.model;
+package com.ekhanei.mvp.model;
 
 import java.util.List;
 

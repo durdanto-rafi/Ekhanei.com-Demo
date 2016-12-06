@@ -1,4 +1,4 @@
-package com.androidtime.mvp;
+package com.ekhanei.mvp;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -11,16 +11,15 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
-import android.widget.TextView;
 
-import com.androidtime.mvp.interfaces.DetailsActivityView;
-import com.androidtime.mvp.presenter.DetailsActivityPresenter;
+import com.ekhanei.mvp.interfaces.DetailsActivityView;
+import com.ekhanei.mvp.presenter.DetailsActivityPresenter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.androidtime.mvp.ConstantValues.INTENT_HREF;
-import static com.androidtime.mvp.ConstantValues.INTENT_TITLE;
+import static com.ekhanei.mvp.ConstantValues.INTENT_HREF;
+import static com.ekhanei.mvp.ConstantValues.INTENT_TITLE;
 
 public class DetailsActivity extends AppCompatActivity implements View.OnClickListener, DetailsActivityView {
 
@@ -117,5 +116,10 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
         Intent intent = new Intent(detailsActivity, MainActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        this.finish();
     }
 }

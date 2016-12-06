@@ -1,4 +1,4 @@
-package com.androidtime.mvp.interfaces;
+package com.ekhanei.mvp.interfaces;
 
 import android.view.View;
 

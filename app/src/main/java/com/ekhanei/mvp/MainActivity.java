@@ -1,4 +1,4 @@
-package com.androidtime.mvp;
+package com.ekhanei.mvp;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -15,32 +15,26 @@ import android.view.View;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.androidtime.mvp.rest.ApiInterface;
-import com.androidtime.mvp.interfaces.MainActivityView;
-import com.androidtime.mvp.interfaces.OnRecyclerViewClickListener;
-import com.androidtime.mvp.model.Recipe;
-import com.androidtime.mvp.model.RecipeDetail;
-import com.androidtime.mvp.presenter.RecipeAdapter;
-import com.androidtime.mvp.presenter.MainActivityPresenter;
-import com.androidtime.mvp.rest.ApiClient;
-import com.androidtime.mvp.utilities.CustomToast;
+import com.ekhanei.mvp.interfaces.MainActivityView;
+import com.ekhanei.mvp.interfaces.OnRecyclerViewClickListener;
+import com.ekhanei.mvp.model.RecipeDetail;
+import com.ekhanei.mvp.presenter.RecipeAdapter;
+import com.ekhanei.mvp.presenter.MainActivityPresenter;
+import com.ekhanei.mvp.utilities.CustomToast;
 import com.mancj.materialsearchbar.MaterialSearchBar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
-import static com.androidtime.mvp.ConstantValues.INTENT_HREF;
-import static com.androidtime.mvp.ConstantValues.INTENT_TITLE;
+import static com.ekhanei.mvp.ConstantValues.INTENT_HREF;
+import static com.ekhanei.mvp.ConstantValues.INTENT_TITLE;
 
 public class MainActivity extends AppCompatActivity implements MainActivityView, MaterialSearchBar.OnSearchActionListener {
     MainActivityPresenter presenter;
     @BindView(R.id.rvList)
     RecyclerView rvList;
-    @BindView(R.id.searchBar)
-    MaterialSearchBar searchBar;
+    @BindView(R.id.sbRecipe)
+    MaterialSearchBar sbRecipe;
     @BindView(R.id.sfRefresh)
     SwipeRefreshLayout sfRefresh;
 
@@ -81,7 +75,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
                         recipeAdapter.notifyItemInserted(recipeDetails.size() - 1);
                         pageIndex++;
                         if (query) {
-                            presenter.getRecipeData(pageIndex, searchBar.getText());
+                            presenter.getRecipeData(pageIndex, sbRecipe.getText());
                         } else {
                             presenter.getRecipeData(pageIndex, "");
                         }
@@ -98,13 +92,12 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
         rvList.setLayoutManager(gridLayoutManager);
         rvList.setAdapter(recipeAdapter);
 
-        searchBar.setOnSearchActionListener(mainActivity);
-        searchBar.enableSearch();
+        sbRecipe.setOnSearchActionListener(mainActivity);
+        sbRecipe.enableSearch();
 
         sfRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-
                 if (!presenter.checkConnectivity(mainActivity)) {
                     CustomToast.T(mainActivity, getResources().getString(R.string.no_connectivity));
                     if (sfRefresh.isRefreshing()) {
@@ -114,6 +107,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
                 }
 
                 //Refreshing data on server
+                sbRecipe.setText("");
                 pageIndex = 1;
                 recipeDetails.clear();
                 recipeAdapter.notifyDataChanged();
@@ -178,8 +172,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
 
     @Override
     public void onSearchStateChanged(boolean b) {
-        if (!b)
-            searchBar.enableSearch();
+        
     }
 
     @Override
@@ -193,11 +186,16 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
         recipeDetails.clear();
         recipeAdapter.notifyDataChanged();
         rvList.swapAdapter(recipeAdapter, false);
-        presenter.getRecipeData(pageIndex, searchBar.getText());
+        presenter.getRecipeData(pageIndex, sbRecipe.getText());
     }
 
     @Override
     public void onButtonClicked(int i) {
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        mainActivity.finish();
     }
 }

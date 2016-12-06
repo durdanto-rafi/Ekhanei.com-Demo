@@ -1,4 +1,4 @@
-package com.androidtime.mvp.presenter;
+package com.ekhanei.mvp.presenter;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -6,10 +6,10 @@ import android.net.NetworkInfo;
 
 import java.util.List;
 
-import com.androidtime.mvp.interfaces.MainActivityView;
-import com.androidtime.mvp.interfaces.OnDataProcess;
-import com.androidtime.mvp.model.RecipeDetail;
-import com.androidtime.mvp.model.InvokeRecipeApi;
+import com.ekhanei.mvp.interfaces.MainActivityView;
+import com.ekhanei.mvp.interfaces.OnDataProcess;
+import com.ekhanei.mvp.model.RecipeDetail;
+import com.ekhanei.mvp.model.InvokeRecipeApi;
 
 
 public class MainActivityPresenter {

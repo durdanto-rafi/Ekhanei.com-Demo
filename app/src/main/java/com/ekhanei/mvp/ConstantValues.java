@@ -1,4 +1,4 @@
-package com.androidtime.mvp;
+package com.ekhanei.mvp;
 
 public class ConstantValues {
     public final static String URL = "http://www.recipepuppy.com/";

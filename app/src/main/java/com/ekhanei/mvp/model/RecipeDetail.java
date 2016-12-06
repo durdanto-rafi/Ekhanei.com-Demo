@@ -1,4 +1,4 @@
-package com.androidtime.mvp.model;
+package com.ekhanei.mvp.model;
 
 /**
  * Created by RAFI on 04-Dec-16.

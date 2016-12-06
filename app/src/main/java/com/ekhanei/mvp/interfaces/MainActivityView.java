@@ -1,10 +1,9 @@
-package com.androidtime.mvp.interfaces;
+package com.ekhanei.mvp.interfaces;
 
 import android.content.Context;
 
-import com.androidtime.mvp.model.RecipeDetail;
+import com.ekhanei.mvp.model.RecipeDetail;
 
-import java.util.HashMap;
 import java.util.List;
 
 public interface MainActivityView {

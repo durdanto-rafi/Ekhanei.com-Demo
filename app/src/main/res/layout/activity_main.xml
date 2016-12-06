@@ -19,7 +19,7 @@
             android:layout_weight="1">
 
             <com.mancj.materialsearchbar.MaterialSearchBar
-                android:id="@+id/searchBar"
+                android:id="@+id/sbRecipe"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:hint="@string/search_hint"

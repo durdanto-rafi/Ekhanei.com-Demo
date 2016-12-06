@@ -1,10 +1,9 @@
-package com.androidtime.mvp.rest;
+package com.ekhanei.mvp.rest;
 
-import com.androidtime.mvp.model.Recipe;
+import com.ekhanei.mvp.model.Recipe;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
-import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 
