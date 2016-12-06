@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">Ekhanei.com Demo</string>
     <string name="search_hint">What do you have to cook?</string>
+    <string name="no_connectivity">No Internet connectivity!</string>
+    <string name="error">Something went wrong!</string>
+    <string name="no_more_data">No More Data Available</string>
+    <string name="loading">Loading information...Please wait</string>
 </resources>

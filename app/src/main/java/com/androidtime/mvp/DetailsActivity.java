@@ -84,7 +84,7 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void startLoading() {
         progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Loading information...Please wait");
+        progressDialog.setMessage(getResources().getString(R.string.loading));
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.setCancelable(false);
         progressDialog.show();
@@ -99,7 +99,7 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public Context getAppContext() {
-        return null;
+        return detailsActivity;
     }
 
     @Override

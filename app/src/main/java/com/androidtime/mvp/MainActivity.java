@@ -1,5 +1,6 @@
 package com.androidtime.mvp;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ import com.androidtime.mvp.model.RecipeDetail;
 import com.androidtime.mvp.presenter.Adapter;
 import com.androidtime.mvp.presenter.MainActivityPresenter;
 import com.androidtime.mvp.rest.ApiClient;
+import com.androidtime.mvp.utilities.CustomToast;
 import com.mancj.materialsearchbar.MaterialSearchBar;
 
 import butterknife.BindView;
@@ -29,6 +31,9 @@ import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static com.androidtime.mvp.ConstantValues.INTENT_HREF;
+import static com.androidtime.mvp.ConstantValues.INTENT_TITLE;
 
 public class MainActivity extends AppCompatActivity implements MainActivityView, MaterialSearchBar.OnSearchActionListener {
     MainActivityPresenter presenter;
@@ -42,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
     MainActivity mainActivity;
     int pageIndex = 1;
     Boolean query = false;
-    int k = 0;
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,8 +62,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
             @Override
             public void recyclerViewListClicked(View v, int position) {
                 Intent intent = new Intent(mainActivity, DetailsActivity.class);
-                intent.putExtra("TITLE", recipeDetails.get(position).getTitle());
-                intent.putExtra("HREF", recipeDetails.get(position).getHref());
+                intent.putExtra(INTENT_TITLE, recipeDetails.get(position).getTitle());
+                intent.putExtra(INTENT_HREF, recipeDetails.get(position).getHref());
                 startActivity(intent);
                 finish();
             }
@@ -69,6 +74,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
                 rvList.post(new Runnable() {
                     @Override
                     public void run() {
+                        if (!presenter.checkConnectivity(mainActivity)) {
+                            CustomToast.T(mainActivity, getResources().getString(R.string.no_connectivity));
+                            return;
+                        }
+
                         recipeDetails.add(new RecipeDetail(""));
                         adapter.notifyItemInserted(recipeDetails.size() - 1);
                         pageIndex++;
@@ -90,21 +100,32 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
         rvList.setLayoutManager(gridLayoutManager);
         rvList.setAdapter(adapter);
 
-        presenter.getRecipeData(pageIndex, "");
-
         searchBar.setOnSearchActionListener(mainActivity);
         searchBar.enableSearch();
+
+        if (!presenter.checkConnectivity(mainActivity)) {
+            CustomToast.T(mainActivity, getResources().getString(R.string.no_connectivity));
+            return;
+        }
+        presenter.getRecipeData(pageIndex, "");
+
 
     }
 
     @Override
     public void startLoading() {
-
+        progressDialog = new ProgressDialog(this);
+        CustomToast.T(mainActivity, getResources().getString(R.string.no_more_data));
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setCancelable(true);
+        progressDialog.show();
     }
 
     @Override
     public void stopLoading() {
-
+        if (progressDialog.isShowing()) {
+            progressDialog.hide();
+        }
     }
 
     @Override
@@ -122,7 +143,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
             adapter.notifyDataChanged();
         } else {
             adapter.setMoreDataAvailable(false);
-            Toast.makeText(mainActivity, "No More Data Available", Toast.LENGTH_LONG).show();
+            CustomToast.T(mainActivity, getResources().getString(R.string.no_more_data));
         }
     }
 
@@ -144,11 +165,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
                     if (recipeDetailsList.size() > 0) {
                         recipeDetails.addAll(recipeDetailsList);
                         adapter.setMoreDataAvailable(false);
-                        Toast.makeText(mainActivity, "No More Data Available", Toast.LENGTH_LONG).show();
+                        CustomToast.T(mainActivity, getResources().getString(R.string.no_more_data));
                     }
                     adapter.notifyDataChanged();
                 } else {
-                    Toast.makeText(mainActivity, "Error", Toast.LENGTH_LONG).show();
+                    CustomToast.T(mainActivity, getResources().getString(R.string.error));
                 }
             }
 
@@ -168,6 +189,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
 
     @Override
     public void onSearchConfirmed(CharSequence charSequence) {
+        if (!presenter.checkConnectivity(mainActivity)) {
+            CustomToast.T(mainActivity, getResources().getString(R.string.no_connectivity));
+            return;
+        }
         query = true;
         pageIndex = 1;
         recipeDetails.clear();
