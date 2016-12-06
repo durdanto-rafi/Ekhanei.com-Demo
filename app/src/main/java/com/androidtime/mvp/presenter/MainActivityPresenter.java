@@ -1,12 +1,9 @@
 package com.androidtime.mvp.presenter;
 
-import java.util.HashMap;
 import java.util.List;
 
 import com.androidtime.mvp.interfaces.MainActivityView;
 import com.androidtime.mvp.interfaces.OnDataProcess;
-import com.androidtime.mvp.interfaces.OnRequestComplete;
-import com.androidtime.mvp.model.InvokeApi;
 import com.androidtime.mvp.model.RecipeDetail;
 import com.androidtime.mvp.model.InvokeRecipeApi;
 

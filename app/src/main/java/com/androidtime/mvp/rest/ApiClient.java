@@ -1,4 +1,4 @@
-package com.androidtime.mvp.utilities;
+package com.androidtime.mvp.rest;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;

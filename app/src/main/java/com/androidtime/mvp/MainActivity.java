@@ -14,14 +14,14 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.androidtime.mvp.interfaces.ApiInterface;
+import com.androidtime.mvp.rest.ApiInterface;
 import com.androidtime.mvp.interfaces.MainActivityView;
 import com.androidtime.mvp.interfaces.OnRecyclerViewClickListener;
 import com.androidtime.mvp.model.Recipe;
 import com.androidtime.mvp.model.RecipeDetail;
 import com.androidtime.mvp.presenter.Adapter;
 import com.androidtime.mvp.presenter.MainActivityPresenter;
-import com.androidtime.mvp.utilities.ApiClient;
+import com.androidtime.mvp.rest.ApiClient;
 import com.mancj.materialsearchbar.MaterialSearchBar;
 
 import butterknife.BindView;

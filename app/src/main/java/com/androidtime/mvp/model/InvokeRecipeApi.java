@@ -1,12 +1,10 @@
 package com.androidtime.mvp.model;
 
 import android.content.Context;
-import android.widget.Toast;
 
-import com.androidtime.mvp.interfaces.ApiInterface;
+import com.androidtime.mvp.rest.ApiInterface;
 import com.androidtime.mvp.interfaces.OnDataProcess;
-import com.androidtime.mvp.interfaces.OnRequestComplete;
-import com.androidtime.mvp.utilities.ApiClient;
+import com.androidtime.mvp.rest.ApiClient;
 
 import retrofit2.Call;
 import retrofit2.Callback;

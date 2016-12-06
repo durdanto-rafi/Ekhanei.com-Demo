@@ -1,4 +1,4 @@
-package com.androidtime.mvp.interfaces;
+package com.androidtime.mvp.rest;
 
 import com.androidtime.mvp.model.Recipe;
 
