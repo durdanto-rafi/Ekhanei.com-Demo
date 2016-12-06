@@ -15,8 +15,10 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import static com.ekhanei.mvp.ConstantValues.ALTERNATIVE_IMAGE;
+
 /**
- * Created by sab99r
+ * Created by RAFI
  */
 public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -46,7 +48,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
         if (viewType == NORMAL) {
-            return new MovieHolder(inflater.inflate(R.layout.gridview_row, parent, false));
+            return new MovieHolder(inflater.inflate(R.layout.row_grid_item, parent, false));
         } else {
             return new LoadHolder(inflater.inflate(R.layout.row_load, parent, false));
         }
@@ -62,7 +64,6 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         if (getItemViewType(position) == NORMAL) {
             ((MovieHolder) holder).bindData(recipeDetails.get(position));
         }
-        //No else part needed as load holder doesn't bind any data
     }
 
     @Override
@@ -97,7 +98,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             if (recipeDetail.getThumbnail().length() > 0)
                 Picasso.with(context).load(recipeDetail.getThumbnail()).resize(100, 100).into(ivThumbnail);
             else
-                Picasso.with(context).load("https://media.licdn.com/mpr/mpr/shrinknp_100_100/AAEAAQAAAAAAAAk7AAAAJDVkYTRmMWJjLWExMDYtNDg0OC1hNDE2LTI0NzE4Mzk0ZTgwYw.png").resize(80, 80).into(ivThumbnail);
+                Picasso.with(context).load(ALTERNATIVE_IMAGE).resize(100, 100).into(ivThumbnail);
 
             ivThumbnail.setOnClickListener(this);
         }
@@ -108,9 +109,6 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 itemListener.recyclerViewListClicked(v, this.getAdapterPosition());
             }
         }
-
-
-
     }
 
     static class LoadHolder extends RecyclerView.ViewHolder {
@@ -123,9 +121,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         isMoreDataAvailable = moreDataAvailable;
     }
 
-    /* notifyDataSetChanged is final method so we can't override it
-         call adapter.notifyDataChanged(); after update the list
-         */
+
     public void notifyDataChanged() {
         notifyDataSetChanged();
         isLoading = false;

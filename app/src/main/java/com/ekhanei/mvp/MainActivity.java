@@ -30,7 +30,7 @@ import static com.ekhanei.mvp.ConstantValues.INTENT_HREF;
 import static com.ekhanei.mvp.ConstantValues.INTENT_TITLE;
 
 public class MainActivity extends AppCompatActivity implements MainActivityView, MaterialSearchBar.OnSearchActionListener {
-    MainActivityPresenter presenter;
+    MainActivityPresenter mainActivityPresenter;
     @BindView(R.id.rvList)
     RecyclerView rvList;
     @BindView(R.id.sbRecipe)
@@ -50,14 +50,14 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        presenter = new MainActivityPresenter(this);
+        mainActivityPresenter = new MainActivityPresenter(this);
         mainActivity = this;
 
         recipeDetails = new ArrayList<>();
         recipeAdapter = new RecipeAdapter(this, recipeDetails, new OnRecyclerViewClickListener() {
             @Override
             public void recyclerViewListClicked(View v, int position) {
-                presenter.gotoDetailsScreen(position);
+                mainActivityPresenter.gotoDetailsScreen(position);
             }
         });
         recipeAdapter.setLoadMoreListener(new RecipeAdapter.OnLoadMoreListener() {
@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
                 rvList.post(new Runnable() {
                     @Override
                     public void run() {
-                        if (!presenter.checkConnectivity(mainActivity)) {
+                        if (!mainActivityPresenter.checkConnectivity(mainActivity)) {
                             CustomToast.T(mainActivity, getResources().getString(R.string.no_connectivity));
                             return;
                         }
@@ -75,9 +75,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
                         recipeAdapter.notifyItemInserted(recipeDetails.size() - 1);
                         pageIndex++;
                         if (query) {
-                            presenter.getRecipeData(pageIndex, sbRecipe.getText());
+                            mainActivityPresenter.getRecipeData(pageIndex, sbRecipe.getText());
                         } else {
-                            presenter.getRecipeData(pageIndex, "");
+                            mainActivityPresenter.getRecipeData(pageIndex, "");
                         }
                     }
                 });
@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
         sfRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                if (!presenter.checkConnectivity(mainActivity)) {
+                if (!mainActivityPresenter.checkConnectivity(mainActivity)) {
                     CustomToast.T(mainActivity, getResources().getString(R.string.no_connectivity));
                     if (sfRefresh.isRefreshing()) {
                         sfRefresh.setRefreshing(false);
@@ -112,15 +112,15 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
                 recipeDetails.clear();
                 recipeAdapter.notifyDataChanged();
                 rvList.swapAdapter(recipeAdapter, false);
-                presenter.getRecipeData(pageIndex, "");
+                mainActivityPresenter.getRecipeData(pageIndex, "");
             }
         });
 
-        if (!presenter.checkConnectivity(mainActivity)) {
+        if (!mainActivityPresenter.checkConnectivity(mainActivity)) {
             CustomToast.T(mainActivity, getResources().getString(R.string.no_connectivity));
             return;
         }
-        presenter.getRecipeData(pageIndex, "");
+        mainActivityPresenter.getRecipeData(pageIndex, "");
     }
 
     @Override
@@ -172,12 +172,12 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
 
     @Override
     public void onSearchStateChanged(boolean b) {
-        
+
     }
 
     @Override
     public void onSearchConfirmed(CharSequence charSequence) {
-        if (!presenter.checkConnectivity(mainActivity)) {
+        if (!mainActivityPresenter.checkConnectivity(mainActivity)) {
             CustomToast.T(mainActivity, getResources().getString(R.string.no_connectivity));
             return;
         }
@@ -186,7 +186,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
         recipeDetails.clear();
         recipeAdapter.notifyDataChanged();
         rvList.swapAdapter(recipeAdapter, false);
-        presenter.getRecipeData(pageIndex, sbRecipe.getText());
+        mainActivityPresenter.getRecipeData(pageIndex, sbRecipe.getText());
     }
 
     @Override

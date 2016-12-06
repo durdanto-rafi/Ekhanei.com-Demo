@@ -89,7 +89,7 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage(getResources().getString(R.string.loading));
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setCancelable(false);
+        progressDialog.setCancelable(true);
         progressDialog.show();
     }
 
