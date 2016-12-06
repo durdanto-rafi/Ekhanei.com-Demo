@@ -21,7 +21,7 @@
             android:layout_gravity="center"
             android:layout_weight="1"
             android:clickable="true"
-            android:padding="@dimen/ten"
+            android:layout_margin="@dimen/five"
             android:foreground="?android:attr/selectableItemBackground"
             card_view:cardCornerRadius="@dimen/two">
 
@@ -56,7 +56,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/zero"
             android:layout_weight="9"
-            android:padding="@dimen/twenty"></WebView>
+            android:layout_margin="@dimen/five"></WebView>
 
     </LinearLayout>
 

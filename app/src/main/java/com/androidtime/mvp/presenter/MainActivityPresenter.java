@@ -41,4 +41,8 @@ public class MainActivityPresenter {
         }
         return false;
     }
+
+    public void gotoDetailsScreen(int position) {
+        view.navigateToDetailsScreen(position);
+    }
 }

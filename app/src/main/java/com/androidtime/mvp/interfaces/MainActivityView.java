@@ -16,4 +16,6 @@ public interface MainActivityView {
     Context getAppContext();
 
     void load(List<RecipeDetail> recipeDetails);
+
+    void navigateToDetailsScreen(int position);
 }

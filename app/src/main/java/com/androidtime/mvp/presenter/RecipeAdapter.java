@@ -18,7 +18,7 @@ import java.util.List;
 /**
  * Created by sab99r
  */
-public class Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public final int NORMAL = 0;
     public final int LOADING = 1;
@@ -36,7 +36,7 @@ public class Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     * */
 
 
-    public Adapter(Context context, List<RecipeDetail> recipeDetails,OnRecyclerViewClickListener itemListener) {
+    public RecipeAdapter(Context context, List<RecipeDetail> recipeDetails, OnRecyclerViewClickListener itemListener) {
         this.context = context;
         this.recipeDetails = recipeDetails;
         this.itemListener = itemListener;
