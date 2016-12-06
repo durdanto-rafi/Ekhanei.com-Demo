@@ -1,7 +1,6 @@
 package com.androidtime.mvp.presenter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,9 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.androidtime.mvp.DetailsActivity;
 import com.androidtime.mvp.R;
-import com.androidtime.mvp.interfaces.RecyclerViewClickListener;
+import com.androidtime.mvp.interfaces.OnRecyclerViewClickListener;
 import com.androidtime.mvp.model.RecipeDetail;
 import com.squareup.picasso.Picasso;
 
@@ -29,7 +27,7 @@ public class Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     List<RecipeDetail> recipeDetails;
     OnLoadMoreListener loadMoreListener;
     boolean isLoading = false, isMoreDataAvailable = true;
-    private static RecyclerViewClickListener itemListener;
+    private static OnRecyclerViewClickListener itemListener;
 
     /*
     * isLoading - to set the remote loading and complete status to fix back to back load more call
@@ -38,7 +36,7 @@ public class Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     * */
 
 
-    public Adapter(Context context, List<RecipeDetail> recipeDetails,RecyclerViewClickListener itemListener) {
+    public Adapter(Context context, List<RecipeDetail> recipeDetails,OnRecyclerViewClickListener itemListener) {
         this.context = context;
         this.recipeDetails = recipeDetails;
         this.itemListener = itemListener;

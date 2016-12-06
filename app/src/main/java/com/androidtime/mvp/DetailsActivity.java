@@ -1,6 +1,7 @@
 package com.androidtime.mvp;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,63 +12,62 @@ import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.androidtime.mvp.interfaces.DetailsActivityView;
+import com.androidtime.mvp.presenter.DetailsActivityPresenter;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class DetailsActivity extends AppCompatActivity implements View.OnClickListener {
+import static com.androidtime.mvp.ConstantValues.INTENT_HREF;
+import static com.androidtime.mvp.ConstantValues.INTENT_TITLE;
 
-    //@BindView(R.id.wvDetails)
+public class DetailsActivity extends AppCompatActivity implements View.OnClickListener, DetailsActivityView {
+
+    @BindView(R.id.wvDetails)
     WebView wvDetails;
+    @BindView(R.id.btnSearch)
+    Button btnSearch;
+    @BindView(R.id.btnTitle)
+    Button btnTitle;
+
     String title, href;
     ProgressDialog progressDialog;
-    Button btnSearch,btnTitle;
     DetailsActivity detailsActivity;
-
+    DetailsActivityPresenter detailsActivityPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_details);
         detailsActivity = this;
-        //ButterKnife.bind(this);
-        wvDetails = (WebView) findViewById(R.id.wvDetails);
-        btnSearch = (Button) findViewById(R.id.btnSearch);
-        btnTitle = (Button) findViewById(R.id.btnTitle);
+        ButterKnife.bind(this);
+        detailsActivityPresenter = new DetailsActivityPresenter(this);
 
         if (getIntent().getExtras() != null) {
-            title = getIntent().getStringExtra("TITLE");
-            href = getIntent().getStringExtra("HREF");
-            LoadImageSearchData();
+            title = getIntent().getStringExtra(INTENT_TITLE);
+            href = getIntent().getStringExtra(INTENT_HREF);
+            LoadDetails();
         }
 
         btnSearch.setOnClickListener(this);
     }
 
-    private void LoadImageSearchData() {
-        btnTitle.setText(title);
+    private void LoadDetails() {
         wvDetails.getSettings().setJavaScriptEnabled(true);
         wvDetails.setWebChromeClient(new WebChromeClient());
         wvDetails.setWebViewClient(new WebViewClient() {
-
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 view.loadUrl(url);
                 return true;
             }
         });
-        wvDetails.loadUrl(href);
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Loading information...Please wait");
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setCancelable(false);
-        progressDialog.show();
+        detailsActivityPresenter.getRecipeDetails(href, title);
+
 
         wvDetails.setWebViewClient(new WebViewClient() {
             public void onPageFinished(WebView view, String url) {
-                if (progressDialog.isShowing()) {
-                    progressDialog.hide();
-                }
+                detailsActivityPresenter.stopProgressDialog();
             }
         });
     }
@@ -76,10 +76,42 @@ public class DetailsActivity extends AppCompatActivity implements View.OnClickLi
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnSearch:
-                Intent intent = new Intent(detailsActivity, MainActivity.class);
-                startActivity(intent);
-                finish();
+                detailsActivityPresenter.gotoMainScreen();
                 break;
         }
+    }
+
+    @Override
+    public void startLoading() {
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Loading information...Please wait");
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+    }
+
+    @Override
+    public void stopLoading() {
+        if (progressDialog.isShowing()) {
+            progressDialog.hide();
+        }
+    }
+
+    @Override
+    public Context getAppContext() {
+        return null;
+    }
+
+    @Override
+    public void loadRecipeDetail(String url, String title) {
+        wvDetails.loadUrl(url);
+        btnTitle.setText(title);
+    }
+
+    @Override
+    public void navigateToMainScreen() {
+        Intent intent = new Intent(detailsActivity, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

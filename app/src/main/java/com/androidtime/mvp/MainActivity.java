@@ -9,22 +9,17 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
-import android.view.WindowManager;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import com.androidtime.mvp.interfaces.ApiInterface;
 import com.androidtime.mvp.interfaces.MainActivityView;
-import com.androidtime.mvp.interfaces.RecyclerViewClickListener;
+import com.androidtime.mvp.interfaces.OnRecyclerViewClickListener;
 import com.androidtime.mvp.model.Recipe;
 import com.androidtime.mvp.model.RecipeDetail;
 import com.androidtime.mvp.presenter.Adapter;
-import com.androidtime.mvp.presenter.ListAdapter;
 import com.androidtime.mvp.presenter.MainActivityPresenter;
 import com.androidtime.mvp.utilities.ApiClient;
 import com.mancj.materialsearchbar.MaterialSearchBar;
@@ -58,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityView,
         mainActivity = this;
 
         recipeDetails = new ArrayList<>();
-        adapter = new Adapter(this, recipeDetails, new RecyclerViewClickListener() {
+        adapter = new Adapter(this, recipeDetails, new OnRecyclerViewClickListener() {
             @Override
             public void recyclerViewListClicked(View v, int position) {
                 Intent intent = new Intent(mainActivity, DetailsActivity.class);

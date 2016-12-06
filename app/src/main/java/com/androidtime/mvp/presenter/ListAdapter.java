@@ -9,7 +9,7 @@ import android.widget.ImageView;
 
 
 import com.androidtime.mvp.R;
-import com.androidtime.mvp.interfaces.RecyclerViewClickListener;
+import com.androidtime.mvp.interfaces.OnRecyclerViewClickListener;
 import com.androidtime.mvp.model.RecipeDetail;
 import com.squareup.picasso.Picasso;
 
@@ -25,12 +25,12 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
     private List<RecipeDetail> recipeDetails;
     Context context;
-    private RecyclerViewClickListener itemListener;
+    private OnRecyclerViewClickListener itemListener;
 
     /**
      * created by Rk-reaz for feedBack dialog
      */
-    public ListAdapter(Context context, ArrayList<RecipeDetail> recipeDetails, RecyclerViewClickListener itemListener) {
+    public ListAdapter(Context context, ArrayList<RecipeDetail> recipeDetails, OnRecyclerViewClickListener itemListener) {
         this.context = context;
         this.itemListener = itemListener;
         this.recipeDetails = recipeDetails;

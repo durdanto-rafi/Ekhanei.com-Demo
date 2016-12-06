@@ -19,8 +19,6 @@ public class MainActivityPresenter {
     }
 
 
-
-
     public void getRecipeData(int pageIndex, String query) {
         view.startLoading();
         new InvokeRecipeApi(view.getAppContext(), pageIndex, query, new OnDataProcess() {
